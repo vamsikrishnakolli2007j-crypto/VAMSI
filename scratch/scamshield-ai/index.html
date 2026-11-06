@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ScamShield AI – Everyday Scam Message Checker</title>
+  <meta name="description" content="AI-assisted everyday scam message checker for detecting fraudulent SMS, WhatsApp messages, emails, and job offers.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <header class="navbar">
+    <div class="container nav-content">
+      <a href="#" class="brand">
+        <div class="brand-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            <path d="M9 12l2 2 4-4"/>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <h1 data-i18n="appTitle">ScamShield AI</h1>
+          <p data-i18n="appSubtitle">Everyday Scam Message Checker</p>
+        </div>
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="#checker" class="active" data-i18n="navHome">Checker</a></li>
+        <li><a href="#scam-library" data-i18n="navScamLibrary">Scam Library</a></li>
+        <li><a href="#quiz-section" data-i18n="navQuiz">Spot the Scam</a></li>
+        <li><a href="#helplines" data-i18n="navHelplines">Helplines</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <!-- Audio effects toggle -->
+        <button id="audioToggleBtn" class="audio-toggle-btn active" title="Toggle Sound FX">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+            <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+          </svg>
+        </button>
+
+        <!-- Language switcher: English, Telugu, Hindi -->
+        <div class="lang-selector">
+          <select id="langSelect" aria-label="Select Language">
+            <option value="en">English</option>
+            <option value="te">తెలుగు (Telugu)</option>
+            <option value="hi">हिन्दी (Hindi)</option>
+          </select>
+        </div>
+
+        <!-- Emergency Helpline Pill -->
+        <a href="tel:1930" id="emergencyHelplineLink" class="emergency-pill" title="National Cyber Crime Reporting Helpline">
+          <span>🚨</span> <span data-i18n="emergencyHelpline">Cyber Helpline: 1930</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="container">
+    
+    <!-- Hero Section -->
+    <section class="hero" id="checker">
+      <div class="status-pill">
+        <span class="pulse-dot"></span>
+        <span id="statusBadgeText" data-i18n="statusBadge">AI Threat Engine v2.4 Active</span>
+      </div>
+      <h2 class="hero-title">
+        <span data-i18n="heroTitle">Protect Yourself from Digital Fraud</span>
+      </h2>
+      <p class="hero-subtitle" data-i18n="heroSubtitle">
+        Instantly analyze suspicious SMS, WhatsApp messages, emails, and job offers with AI-assisted behavioral threat analysis.
+      </p>
+
+      <!-- Privacy & Safe Analysis Guarantee -->
+      <div class="privacy-banner">
+        <div class="privacy-icon">🛡️</div>
+        <div>
+          <strong data-i18n="privacyBannerTitle">Privacy & Safe Analysis Guarantee</strong>
+          <p data-i18n="privacyBannerText">
+            We never ask for or store passwords, OTPs, or bank details. Sensitive numbers (like phone numbers or simulated codes) are sanitized locally. Results are probabilistic estimates.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Message Checker Card -->
+    <section class="analyzer-card">
+      <div class="input-header">
+        <label for="messageInput">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+          </svg>
+          <span data-i18n="inputLabel">Paste Suspicious Message Below:</span>
+        </label>
+        <div class="input-counters">
+          <span id="charCountText">0 characters</span>
+          <span>•</span>
+          <span id="wordCountText">0 words</span>
+        </div>
+      </div>
+
+      <div class="textarea-container">
+        <textarea 
+          id="messageInput" 
+          class="message-textarea" 
+          placeholder="Paste the SMS, WhatsApp text, email snippet, or job offer here..."
+          data-i18n-placeholder="inputPlaceholder"
+          aria-label="Paste Suspicious Message"></textarea>
+
+        <!-- Scanning Animation Overlay -->
+        <div id="scanOverlay" class="scan-overlay">
+          <div class="scan-beam"></div>
+          <div class="scan-radar">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#00f0ff" stroke-width="2">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            </svg>
+          </div>
+          <div id="scanStepText" class="scan-step-text">Extracting URLs and contact triggers...</div>
+          <div class="scan-progress-bar">
+            <div id="scanProgressFill" class="scan-progress-fill"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Action Button Row -->
+      <div class="action-row">
+        <div class="btn-group-left">
+          <button id="pasteBtn" class="btn-secondary" type="button">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
+              <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
+            </svg>
+            <span data-i18n="pasteBtn">Paste Clipboard</span>
+          </button>
+          <button id="clearBtn" class="btn-secondary" type="button">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="3 6 5 6 21 6"></polyline>
+              <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+            </svg>
+            <span data-i18n="clearBtn">Clear</span>
+          </button>
+        </div>
+
+        <button id="checkBtn" class="btn-primary" type="button">
+          <span>🛡️</span>
+          <span data-i18n="checkBtn">Check Message</span>
+        </button>
+      </div>
+
+      <!-- Demonstration Sample Messages -->
+      <div class="samples-section">
+        <div class="samples-header">
+          <span class="samples-title">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+            </svg>
+            <span data-i18n="sampleTitle">Quick Demo Samples:</span>
+          </span>
+          <span style="font-size: 0.75rem; color: var(--text-subtle);" data-i18n="sampleHint">
+            Click any realistic scenario below to test the analyzer:
+          </span>
+        </div>
+        <div id="sampleChipsContainer" class="sample-chips-grid">
+          <!-- Populated by samples.js -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Results Section (Revealed after scan) -->
+    <section id="resultsSection" class="results-section">
+      <div class="results-grid">
+        
+        <!-- Risk Meter Gauge Card -->
+        <div class="risk-meter-card">
+          <span style="font-size: 0.8rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); letter-spacing: 0.05em;" data-i18n="riskScoreLabel">
+            Scam Risk Index
+          </span>
+
+          <div class="gauge-wrapper">
+            <svg class="gauge-svg" viewBox="0 0 200 200">
+              <circle class="gauge-bg-circle" cx="100" cy="100" r="90" />
+              <circle id="gaugeFillCircle" class="gauge-fill-circle" cx="100" cy="100" r="90" />
+            </svg>
+            <div class="gauge-center-content">
+              <span id="gaugeScoreValue" class="gauge-score-value">0</span>
+              <span class="gauge-score-unit">/ 100</span>
+            </div>
+          </div>
+
+          <div id="riskClassificationBadge" class="risk-classification-badge risk-level-low">
+            Low Risk
+          </div>
+
+          <p id="riskSummaryText" class="risk-summary-text">
+            Evaluating message telemetry...
+          </p>
+
+          <!-- Probabilistic Disclaimer Requirement -->
+          <div class="probabilistic-disclaimer">
+            <strong style="color: #cbd5e1; display: block; margin-bottom: 2px;" data-i18n="disclaimerTitle">Important Disclaimer:</strong>
+            <span data-i18n="disclaimerText">
+              Results are probabilistic estimates and can contain mistakes. They do not constitute definitive legal or technical proof. Always verify independently through official channels.
+            </span>
+          </div>
+        </div>
+
+        <!-- Findings & Breakdown Panel -->
+        <div class="findings-panel">
+          
+          <!-- Contextual Highlight Box -->
+          <div class="highlight-card">
+            <div class="card-heading">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+              <span data-i18n="highlightTitle">Contextual Text Breakdown</span>
+            </div>
+            <div class="card-subheading" data-i18n="highlightDesc">
+              Highlighted phrases indicate potential red flags detected during scan:
+            </div>
+            <div id="highlightedContentBox" class="highlighted-box">
+              <!-- Rendered highlighted message -->
+            </div>
+          </div>
+
+          <!-- Detected Threat Vectors Breakdown -->
+          <div class="vectors-container">
+            <div class="card-heading">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                <line x1="12" y1="9" x2="12" y2="13"></line>
+                <line x1="12" y1="17" x2="12.01" y2="17"></line>
+              </svg>
+              <span data-i18n="warningSignsTitle">Warning Signs Breakdown</span>
+            </div>
+            <div class="card-subheading" data-i18n="warningSignsSubtitle">
+              Specific triggers detected in this message:
+            </div>
+            <div id="vectorsListContainer" class="vectors-list">
+              <!-- Populated by heuristics.js -->
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Action Plan / Safety Recommendations -->
+      <div class="action-plan-card">
+        <div class="card-heading">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2">
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+          </svg>
+          <span data-i18n="actionPlanTitle">Practical Safety Recommendations</span>
+        </div>
+        <div class="card-subheading" data-i18n="actionPlanSubtitle">
+          Step-by-step guidance on how to respond safely:
+        </div>
+
+        <div class="action-columns">
+          <div class="action-col dos">
+            <div class="col-header dos-title">
+              <span>✓</span> <span data-i18n="dosTitle">What to do right now</span>
+            </div>
+            <ul id="dosList" class="checklist dos">
+              <!-- Rendered via i18n -->
+            </ul>
+          </div>
+
+          <div class="action-col donts">
+            <div class="col-header donts-title">
+              <span>✕</span> <span data-i18n="dontsTitle">What NOT to do</span>
+            </div>
+            <ul id="dontsList" class="checklist donts">
+              <!-- Rendered via i18n -->
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Action buttons row -->
+      <div class="report-actions-row">
+        <button id="copyReportBtn" class="btn-secondary" type="button">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span data-i18n="copyReportBtn">Copy Threat Advisory</span>
+        </button>
+
+        <a href="https://cybercrime.gov.in" target="_blank" rel="noopener noreferrer" class="btn-secondary" style="text-decoration: none;">
+          <span>🚨</span> <span data-i18n="reportHelplineBtn">Report to 1930 Helpline</span>
+        </a>
+
+        <button id="shareAlertBtn" class="btn-primary" type="button">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="18" cy="5" r="3"></circle>
+            <circle cx="6" cy="12" r="3"></circle>
+            <circle cx="18" cy="19" r="3"></circle>
+            <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+            <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+          </svg>
+          <span data-i18n="shareAlertBtn">Share Warning</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- Common Scam Types Educational Directory -->
+    <section class="info-section" id="scam-library">
+      <h3 class="section-title" data-i18n="libraryTitle">Common Scam Types Directory</h3>
+      <p class="section-subtitle" data-i18n="librarySubtitle">
+        Learn the anatomy of prevalent scams affecting people everyday in India & worldwide
+      </p>
+
+      <div class="scam-types-grid">
+        <div class="scam-type-card">
+          <span class="scam-type-icon">⚡</span>
+          <h3>Electricity Power Cut Fraud</h3>
+          <p>Scammers send fake SMS claiming power will be cut tonight at 9:30 PM due to unpaid bills. They give a personal phone number and ask you to install AnyDesk or pay on unverified UPI.</p>
+          <ul class="red-flags-list">
+            <li>Personal 10-digit mobile number</li>
+            <li>Panic deadline: "tonight at 9:30 PM"</li>
+            <li>Requests screen sharing or APK install</li>
+          </ul>
+        </div>
+
+        <div class="scam-type-card">
+          <span class="scam-type-icon">🏦</span>
+          <h3>Bank KYC & Account Block</h3>
+          <p>Claims your SBI, HDFC, or ICICI account will be suspended today because your PAN/KYC is outdated. Directs you to cloned phishing websites ending in .xyz or .top.</p>
+          <ul class="red-flags-list">
+            <li>Unofficial domains (sbi-kyc-update.xyz)</li>
+            <li>Threat of immediate 24-hour account freeze</li>
+            <li>Asks for Internet Banking passwords or OTP</li>
+          </ul>
+        </div>
+
+        <div class="scam-type-card">
+          <span class="scam-type-icon">💼</span>
+          <h3>YouTube / Task Prepaid Fraud</h3>
+          <p>Unsolicited WhatsApp offers of ₹3,000–₹8,000/day for liking videos or rating Google maps. Pays ₹150 first as bait, then demands large prepaid deposits on Telegram.</p>
+          <ul class="red-flags-list">
+            <li>Unrealistically high pay for trivial tasks</li>
+            <li>Channels users to Telegram secret groups</li>
+            <li>Demands "VIP task deposit" to release money</li>
+          </ul>
+        </div>
+
+        <div class="scam-type-card">
+          <span class="scam-type-icon">📦</span>
+          <h3>Courier / India Post Smishing</h3>
+          <p>Claims a parcel could not be delivered due to an incomplete street address. Prompts you to click a link and pay a tiny ₹10 fee, harvesting your full card credentials.</p>
+          <ul class="red-flags-list">
+            <li>Fake tracking link (indiapost-track.top)</li>
+            <li>Urgent 12-hour deadline before return</li>
+            <li>Requests CVV and OTP for small token fees</li>
+          </ul>
+        </div>
+
+        <div class="scam-type-card">
+          <span class="scam-type-icon">👮</span>
+          <h3>Digital Arrest & Legal Threat</h3>
+          <p>Impersonates police, CBI, or customs officials claiming an illegal parcel or money laundering case in your name. Coerces victims over Skype or video calls to transfer savings.</p>
+          <ul class="red-flags-list">
+            <li>Threat of "immediate arrest" or raid</li>
+            <li>No police force conducts arrests via video call</li>
+            <li>Demands "security deposit" to clear name</li>
+          </ul>
+        </div>
+
+        <div class="scam-type-card">
+          <span class="scam-type-icon">🎁</span>
+          <h3>KBC / Lottery Lucky Draw</h3>
+          <p>Claims your mobile number won ₹25,00,000 in a television lottery. Asks for bank details and GST processing fees to 'release' a prize that doesn't exist.</p>
+          <ul class="red-flags-list">
+            <li>Prizes for contests you never entered</li>
+            <li>Advance tax or processing fee demands</li>
+            <li>Unofficial WhatsApp contact numbers</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Spot the Scam Interactive Quiz -->
+    <section class="info-section" id="quiz-section">
+      <h3 class="section-title" data-i18n="quizTitle">Spot the Scam – Quick Challenge</h3>
+      <p class="section-subtitle" data-i18n="quizSubtitle">
+        Test your cybersecurity intuition against real-world scenario tests.
+      </p>
+
+      <div class="quiz-card">
+        <span id="quizProgressText" class="quiz-progress-text">Challenge Scenario 1 of 3</span>
+        <div id="quizScenarioText" class="quiz-scenario-text">
+          Loading scenario...
+        </div>
+
+        <div id="quizOptionsContainer" class="quiz-options-list">
+          <!-- Populated by quiz.js -->
+        </div>
+
+        <div id="quizFeedbackBox" class="quiz-feedback-box">
+          <!-- Feedback explanation -->
+        </div>
+
+        <div style="text-align: right;">
+          <button id="quizNextBtn" class="btn-primary" style="display: none;" type="button">
+            Next Scenario
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Official Helplines Directory -->
+    <section class="info-section" id="helplines">
+      <h3 class="section-title" data-i18n="helplineTitle">Official Emergency Cyber Contacts</h3>
+      <p class="section-subtitle" data-i18n="helplineSubtitle">
+        Legitimate government and banking helplines you can trust unconditionally:
+      </p>
+
+      <div class="helplines-grid">
+        <div class="helpline-card">
+          <div>
+            <h3>National Cyber Crime Portal</h3>
+            <p>Official Indian government helpline for reporting financial cyber fraud, online harassment, and phishing threats.</p>
+            <span class="helpline-number">📞 1930</span>
+          </div>
+          <a href="https://cybercrime.gov.in" target="_blank" rel="noopener noreferrer" class="helpline-btn">Visit cybercrime.gov.in</a>
+        </div>
+
+        <div class="helpline-card">
+          <div>
+            <h3>Chakshu / Sanchar Saathi</h3>
+            <p>Department of Telecommunications portal to report suspicious fraud communication via SMS, WhatsApp, and spoofed calls.</p>
+            <span class="helpline-number">🌐 Chakshu Portal</span>
+          </div>
+          <a href="https://sancharsaathi.gov.in" target="_blank" rel="noopener noreferrer" class="helpline-btn">Report Mobile Fraud</a>
+        </div>
+
+        <div class="helpline-card">
+          <div>
+            <h3>RBI Sachet Portal</h3>
+            <p>Reserve Bank of India initiative to check authorized non-banking financial entities and report illegal deposit schemes.</p>
+            <span class="helpline-number">🛡️ RBI Kehta Hai</span>
+          </div>
+          <a href="https://sachet.rbi.org.in" target="_blank" rel="noopener noreferrer" class="helpline-btn">Visit RBI Sachet</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Toast Notification -->
+  <div id="toastMsg" class="toast-msg">Notification</div>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <p class="footer-text" data-i18n="footerDisclaimer">
+        ScamShield AI is an educational cyber-awareness tool designed for college hackathon demonstration. It analyzes structural heuristics and behavioral signals. It does not replace authorized law enforcement or official bank verification.
+      </p>
+      <p class="footer-copy">
+        © 2026 ScamShield AI • <span data-i18n="footerBuiltFor">Built for Cyber Security Innovation & Community Safety</span>
+      </p>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/i18n.js"></script>
+  <script src="js/samples.js"></script>
+  <script src="js/heuristics.js"></script>
+  <script src="js/quiz.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
